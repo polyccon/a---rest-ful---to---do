@@ -1,6 +1,5 @@
 import sqlite3
-from flask import Flask, render_template, request
-
+from flask import Flask, jsonify, request, abort, make_response
 
 
 app = Flask(__name__)
@@ -13,11 +12,31 @@ def main():
     testuser = 'user18081971'
     conn = sqlite3.connect('todo.db')
     c = conn.cursor()
-    tasks = c.execute("""SELECT task FROM todo WHERE user ='%s'"""% testuser).fetchone()
-    c.close()
-    return tasks
+    tasks = c.execute("""SELECT * FROM todo WHERE user ='%s'"""% testuser).fetchall()
+    conn.commit()
+    conn.close()
+    return make_response(jsonify({"tasks":tasks}), 200)
 
 
+@app.route("/add", methods=['POST'])
+def add():
+    try:
+        request_body = request.get_json()
+        user = request_body['user']
+        task = request_body['task']
+        complete = request_body['complete']
+
+        conn = sqlite3.connect('todo.db')
+        c = conn.cursor()
+        c.execute("""INSERT INTO todo (user, task, complete) VALUES (?, ?, ?)""", (user, task, complete))
+        tasks = c.execute("""SELECT task FROM todo WHERE user ='%s'"""% user).fetchall()
+
+        conn.commit()
+        conn.close()
+        return make_response(jsonify({"tasks":tasks}), 200)
+    except:
+        response = 'Error'
+        return response
 
 
 

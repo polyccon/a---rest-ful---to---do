@@ -9,7 +9,7 @@ def create_connection(db_file):
         print(sqlite3.version)
         c = conn.cursor()
         c.execute(''' CREATE TABLE todo
-                    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    (id INTEGER PRIMARY KEY,
                     user VARCHAR(100),
                     task VARCHAR(300), complete INT);''')
 
