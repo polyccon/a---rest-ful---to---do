@@ -38,7 +38,14 @@ def add():
         response = 'Error'
         return response
 
-
+@app.route('/delete/<int:task_id>')
+def delete_task(task_id):
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    c.execute("""DELETE FROM todo WHERE id ='%s'"""% task_id)
+    conn.commit()
+    conn.close()
+    return redirect('/')
 
 
 
