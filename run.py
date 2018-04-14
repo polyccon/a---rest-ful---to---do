@@ -1,6 +1,7 @@
 import sqlite3
-from flask import Flask, jsonify, request, abort, make_response
-
+from flask import Flask
+from flask import jsonify, request, abort, make_response
+from flask import redirect
 
 app = Flask(__name__)
 
@@ -47,6 +48,20 @@ def delete_task(task_id):
     conn.close()
     return redirect('/')
 
+@app.route('/done/<int:task_id>')
+def resolve_task(task_id):
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    complete = c.execute("""SELECT complete FROM todo WHERE id ='%s'"""% task_id).fetchone()
+
+    if complete == 0:
+        complete =1
+    else:
+        complete = 0
+    c.execute("""UPDATE todo SET complete= %s WHERE id ='%s'"""% (complete, task_id))
+    conn.commit()
+    conn.close()
+    return redirect('/')
 
 
 if __name__ == "__main__":
