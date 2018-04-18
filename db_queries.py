@@ -49,3 +49,19 @@ def get_user(username):
     conn.commit()
     conn.close()
     return user
+
+def store_token(token, username):
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    c.execute("""UPDATE users SET token='%s' WHERE user ='%s';"""% (token, username))
+    conn.commit()
+    conn.close()
+    return True
+
+def is_token(token):
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    tok = c.execute("""SELECT COUNT(*) FROM users WHERE token = '%s';"""% token).fetchone()
+    conn.commit()
+    conn.close()
+    return tok

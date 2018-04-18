@@ -12,7 +12,8 @@ def create_connection(db_file):
         c.execute(''' CREATE TABLE users
                     (id INTEGER PRIMARY KEY,
                     user VARCHAR(100) UNIQUE NOT NULL,
-                    password VARCHAR(100) NOT NULL);''')
+                    password VARCHAR(100) NOT NULL,
+                    token UUID UNIQUE);''')
         c.execute(''' CREATE TABLE todo
                     (id INTEGER PRIMARY KEY,
                     user VARCHAR(100) REFERENCES users(user) NOT NULL,
@@ -20,7 +21,7 @@ def create_connection(db_file):
                     complete INT NOT NULL);''')
         c.execute('''INSERT INTO users
                     VALUES (1, 'user18081971',
-                    'Aphex');''')
+                    'Aphex', NULL);''')
         c.execute('''INSERT INTO todo
                     VALUES (1, 'user18081971',
                     'wash the dishes', 0);''')
