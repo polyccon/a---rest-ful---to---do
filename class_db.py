@@ -30,7 +30,7 @@ class UserStore:
   @classmethod
   def login(cls, user_id, username, password):
     user = MemoryStore.get("user:%s" % user_id)
-    if user:
+    if user is not None:
       return user['username'] == username and user["password"] == password
     else:
       return False
@@ -67,14 +67,15 @@ class TodoStore:
 
 @app.before_request
 def before_request():
-    username = session.get('user_id')
-    print ('username', username)
+    user_id = session.get('user_id')
+    user = MemoryStore.get("user:%s" % user_id)
     if request.endpoint in ['login', 'logout']:
         return
-    if not username:
-        abort(401, 'Login required.')
-    if not db_queries.is_username_valid(username)[0]:
-        abort(402, 'Invalid credentials, please login again.')
+    if not user_id:
+        return make_response(jsonify({"error":'Login required'}), 401)
+    user = MemoryStore.get("user:%s" % user_id)
+    if not user:
+        return make_response(jsonify({"error":'Invalid credentials, please login again.'}), 402)
 
 @app.route("/get")
 def get_todo():
