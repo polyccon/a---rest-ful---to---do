@@ -25,15 +25,15 @@ class UserStore:
   @classmethod
   def create(cls, username, password):
       user_id = str(uuid.uuid4())
-      MemoryStore.set("user:%s" % user_id, {'username': username, 'password': password})
+      MemoryStore.set("user:%s" % username, {'id': user_id, 'username': username, 'password': password})
 
   @classmethod
-  def login(cls, user_id, username, password):
-    user = MemoryStore.get("user:%s" % user_id)
-    if user is not None:
-      return user['username'] == username and user["password"] == password
+  def login(cls, username, password):
+    user = MemoryStore.get("user:%s" % username)
+    if user is not None and user["password"] == password:
+      return user
     else:
-      return False
+      return None
 
 
 class TodoStore:
@@ -128,12 +128,13 @@ def login():
         password = request_body['password']
     except Exception as e:
         print ('error', e)
-        return make_response(jsonify({"message":'Bad request'}), 400)
-    if UserStore.login(user_id, username, password):
-        session['user_id'] = user_id
+        return make_response(jsonify({"message":'Error: Bad request'}), 400)
+    user = UserStore.login(username, password)
+    if user:
+        session['user_id'] = user['id']
         return make_response(jsonify({"message":'You\'re now logged in'}), 200)
     else:
-        return make_response(jsonify({"message":'Invalid username or password'}), 400)
+        return make_response(jsonify({"message":'Error: Invalid username or password'}), 400)
 
 @app.route("/logout")
 def logout():
