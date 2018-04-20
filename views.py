@@ -135,6 +135,11 @@ def login():
     else:
         return make_response(jsonify({"message":'Invalid username or password'}), 400)
 
+@app.route("/logout")
+def logout():
+    session.pop('user_id', None)
+    return make_response(jsonify({"message":'You\'re now logged out'}), 200)
+
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
     app.run(debug=True, host='127.0.0.1', port=8000)
