@@ -1,5 +1,5 @@
 import os
-
+import uuid
 from flask import Flask
 from flask import jsonify, request, make_response, session
 
@@ -24,7 +24,7 @@ MemoryStore.init()
 class UserStore:
   @classmethod
   def create(cls, username, password):
-      user_id = str(len(UserStore.keys()) +1)
+      user_id = str(uuid.uuid4())
       MemoryStore.set("user:%s" % user_id, {'username': username, 'password': password})
 
   @classmethod
@@ -65,11 +65,25 @@ class TodoStore:
                 MemoryStore.set("todo:%s": "%" % user_id, todos)
                 break
 
+@app.before_request
+def before_request():
+    username = session.get('user_id')
+    print ('username', username)
+    if request.endpoint in ['login', 'logout']:
+        return
+    if not username:
+        abort(401, 'Login required.')
+    if not db_queries.is_username_valid(username)[0]:
+        abort(402, 'Invalid credentials, please login again.')
+
 @app.route("/get")
 def get_todo():
-    user_id = 1
-    tasks = TodoStore.get(user_id)
-    return make_response(jsonify({"tasks":tasks}), 200)
+    user_id = session.get('user_id')
+    if user_id is not None:
+        tasks = TodoStore.get(user_id)
+        return make_response(jsonify({"tasks":tasks}), 200)
+    else:
+        return make_response(jsonify({"error":'Please login'}), 401)
 
 @app.route("/add", method=['POST'])
 def add_todo():
