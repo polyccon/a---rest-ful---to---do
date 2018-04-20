@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask
-from flask import jsonify, request, abort, make_response
+from flask import jsonify, request, make_response, session
 
 app = Flask(__name__)
 
@@ -20,21 +20,21 @@ class MemoryStore:
 
 MemoryStore.init()
 
-class MemoryStore:
-  pass
 
 class UserStore:
   @classmethod
-  def create(cls, name, password):
-    MemoryStore.set("user:%s" % name, {'name': name, 'password': password})
+  def create(cls, username, password):
+      user_id = str(len(UserStore.keys()) +1)
+      MemoryStore.set("user:%s" % user_id, {'username': username, 'password': password})
 
   @classmethod
-  def login(cls, name, password):
-    user = MemoryStore.get("user:%s" % name)
+  def login(cls, user_id, username, password):
+    user = MemoryStore.get("user:%s" % user_id)
     if user:
-      return user["password"] == password
+      return user['username'] == username and user["password"] == password
     else:
       return False
+
 
 class TodoStore:
     @classmethod
@@ -76,12 +76,14 @@ def add_todo():
     try:
         request_body = request.get_json()
         task = request_body['task']
-    except:
+    except Exception as e:
+        print ('error', e)
         return make_response(jsonify({"message":'Error'}), 400)
     try:
         TodoStore.add(username, task)
         return get_todo()
-    except:
+    except Exception as e:
+        print ('error', e)
         return make_response(jsonify({"message":'Error'}), 500)
 
 @app.route("/complete/<id>", method=['PUT'])
@@ -89,7 +91,8 @@ def complete_task(task_id):
     try:
         TodoStore.complete(username, task_id)
         return get_todo()
-    except:
+    except Exception as e:
+        print ('error', e)
         return make_response(jsonify({"message":'Error'}), 500)
 
 
@@ -98,9 +101,24 @@ def complete_task(task_id):
     try:
         TodoStore.delete(username, task_id)
         return get_todo()
-    except:
+    except Exception as e:
+        print ('error', e)
         return make_response(jsonify({"message":'Error'}), 500)
 
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        request_body = request.get_json()
+        username = request_body['username']
+        password = request_body['password']
+    except Exception as e:
+        print ('error', e)
+        return make_response(jsonify({"message":'Bad request'}), 400)
+    if UserStore.login(user_id, username, password):
+        session['user_id'] = user_id
+        return make_response(jsonify({"message":'You\'re now logged in'}), 200)
+    else:
+        return make_response(jsonify({"message":'Invalid username or password'}), 400)
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)
