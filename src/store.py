@@ -1,5 +1,4 @@
 import uuid
-import copy
 
 class MemoryStore:
     @classmethod
