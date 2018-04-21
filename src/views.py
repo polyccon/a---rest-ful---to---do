@@ -1,21 +1,21 @@
-from flask import Flask, jsonify, request, make_response, session
+from flask import jsonify, request, make_response, session
 
 from .store import *
-
-app = Flask(__name__)
-app.config['DEBUG'] = True
+from .core import app
 
 @app.before_request
 def before_request():
     username = session.get('username')
     if request.endpoint in ['login', 'logout']:
         return
-    if not username:
+    if username is None:
         return make_response(jsonify({"message":'Login required', "error": True}), 401)
     user = UserStore.get_one(username)
-    if user is not None:
+    if user is None:
         return make_response(jsonify({"message":'Invalid credentials, please login again.',
-                                    "error": True}), 401)
+                                "error": True}), 401)
+    else:
+        return
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -28,7 +28,7 @@ def login():
         return make_response(jsonify({"message":"Bad request", "error": True}), 400)
     user = UserStore.login(username, password)
     if user is not None:
-        session['username'] = user['id']
+        session['username'] = user['username']
         return make_response(jsonify({"message":'You\'re now logged in'}), 200)
     else:
         return make_response(jsonify({"message":"Invalid username or password",
