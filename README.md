@@ -1,4 +1,4 @@
-# To--Do--List
+# A-Restful-To--Do--List
 
 A RESTful API made with Python 3.6 and flask framework with authentication
 
@@ -15,5 +15,6 @@ To run the code:
 6. Run the command: `python3 run.py`
 7. Open 'http://localhost:8000' in your browser (or not necessarily)
 8. You are now ready to make requests to the endpoints
-9. To run the tests, command is: `pytest`
+9. To run the tests, you need to be located at the root of this directory and
+   run the command: `pytest`
 10. Deactivate the environment when the code exits: deactivate
