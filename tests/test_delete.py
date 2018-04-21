@@ -7,19 +7,22 @@ def test_login_works_and_delete_a_todo_subsequently():
         when auth details are correct
     """
     body1 = {
-        'username': 'user18081971',
-        'password': 'Aphex'
+        'username': 'Dustin Hoffman',
+        'password': 'Rainman'
     }
     body2 = {
-        'task': 'clean my cds'
+        'task': 'ironing and cleaning'
     }
     s = requests.session()
 
     s.post('http://localhost:8000/login',
                              json=body1)
+    s.post('http://localhost:8000/add',
+                             json=body2)
     response = s.delete('http://localhost:8000/delete/1',
                              json=body2)
 
-    actual = response.status_code
-
-    assert actual == 200
+    actual = response.json()['tasks']
+    actual_status_code = response.status_code
+    assert actual_status_code == 200
+    assert actual == []

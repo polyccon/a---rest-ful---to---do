@@ -32,6 +32,8 @@ class UserStore:
       return None
 
 UserStore.create('user18081971','Aphex')
+UserStore.create('Tom Cruise','Top Gun')
+UserStore.create('Dustin Hoffman','Rainman')
 
 class TodoStore:
     @classmethod
@@ -41,7 +43,6 @@ class TodoStore:
     @classmethod
     def add(cls, user_id, task):
         todos = TodoStore.get(user_id)
-        print ('todos', todos, type(todos))
         keys = ['id', 'description', 'complete']
         values = [str(len(todos)+1), task, False]
         todos.append(dict(zip(keys, values)))
@@ -52,7 +53,7 @@ class TodoStore:
         todos = TodoStore.get(user_id)
         for item in todos:
             if item["id"] == str(task_id):
-                item["complete"] == True
+                item["complete"] = True
                 MemoryStore.set("todo:%s"% user_id, todos)
                 break
 

@@ -1,1 +1,19 @@
-# to-do
+# To--Do--List
+
+A RESTful API made with Python 3.6 and flask framework with authentication
+
+Instructions for use:
+
+To run the code:
+
+1. Clone the repo and cd into the directory
+2. Dependencies are all installed inside a virtual environment, to use it you
+   need to have virtualenv installed as such: `pip install virtualenv`
+3. Create virtual environment: `virtualenv my_env`
+4. Activate the virtual environment: `source my_env/bin/activate`
+5. Install dependencies inside it: `pip install -r requirements.txt`
+6. Run the command: python3 run.py
+7. Go to 'http://localhost:8000' in your browser
+8. You are ready to make requests to the endpoints
+9. To run the tests, command is: `pytest`
+10. Deactivate the environment when the code exits: deactivate
