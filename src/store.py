@@ -22,8 +22,8 @@ class UserStore:
       MemoryStore.set("user:%s" % username, {'id': user_id, 'username': username,
                                                             'password': password})
   @classmethod
-  def get_one(cls, user_id):
-      return MemoryStore.get(user_id)
+  def get_one(cls, username):
+      return MemoryStore.get("user:%s" % username)
 
   @classmethod
   def login(cls, username, password):
@@ -40,31 +40,31 @@ UserStore.create('Homer Simpson','TV')
 
 class TodoStore:
     @classmethod
-    def get_all_by_user(cls, user_id):
-        return MemoryStore.get("todo:%s" % user_id) or []
+    def get_all_by_user(cls, username):
+        return MemoryStore.get("todo:%s" % username) or []
 
     @classmethod
-    def add(cls, user_id, task):
-        todos = TodoStore.get_all_by_user(user_id)
+    def add(cls, username, task):
+        todos = TodoStore.get_all_by_user(username)
         keys = ['id', 'description', 'complete']
         values = [str(len(todos)+1), task, False]
         todos.append(dict(zip(keys, values)))
-        MemoryStore.set("todo:%s"% user_id, todos)
+        MemoryStore.set("todo:%s"% username, todos)
 
     @classmethod
-    def complete(cls, user_id, task_id):
-        todos = TodoStore.get_all_by_user(user_id)
+    def complete(cls, username, task_id):
+        todos = TodoStore.get_all_by_user(username)
         for item in todos:
             if item["id"] == str(task_id):
                 item["complete"] = True
-                MemoryStore.set("todo:%s"% user_id, todos)
+                MemoryStore.set("todo:%s"% username, todos)
                 break
 
     @classmethod
-    def delete(cls, user_id, task_id):
-        todos = TodoStore.get_all_by_user(user_id)
+    def delete(cls, username, task_id):
+        todos = TodoStore.get_all_by_user(username)
         for item in todos:
             if item["id"] == str(task_id):
                 todos.remove(item)
-                MemoryStore.set("todo:%s"% user_id, todos)
+                MemoryStore.set("todo:%s"% username, todos)
                 break
