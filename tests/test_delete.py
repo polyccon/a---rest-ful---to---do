@@ -15,11 +15,11 @@ def test_delete_a_todo():
     }
     s = requests.session()
 
-    s.post('http://localhost:8000/login',
+    s.post('http://localhost:8000/todos/login',
                              json=body1)
-    s.post('http://localhost:8000/add',
+    s.post('http://localhost:8000/todos',
                              json=body2)
-    response = s.delete('http://localhost:8000/delete/1',
+    response = s.delete('http://localhost:8000/todos/1/delete',
                              json=body2)
 
     actual = response.json()['tasks']

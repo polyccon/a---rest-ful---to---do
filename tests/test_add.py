@@ -15,9 +15,9 @@ def test_login_works_and_add_a_todo_subsequently():
     }
     s = requests.session()
 
-    s.post('http://localhost:8000/login',
+    s.post('http://localhost:8000/todos/login',
                              json=body1)
-    response = s.post('http://localhost:8000/add',
+    response = s.post('http://localhost:8000/todos',
                              json=body2)
 
     actual = response.status_code

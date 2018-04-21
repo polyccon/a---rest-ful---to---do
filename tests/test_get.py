@@ -11,9 +11,9 @@ def test_get_endpoint():
     }
     s = requests.session()
 
-    s.post('http://localhost:8000/login',
+    s.post('http://localhost:8000/todos/login',
                              json=body1)
-    response = s.get('http://localhost:8000/get')
+    response = s.get('http://localhost:8000/todos')
 
     actual = response.json()['tasks']
     assert actual == []

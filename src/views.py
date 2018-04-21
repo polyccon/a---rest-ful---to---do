@@ -17,7 +17,7 @@ def before_request():
     else:
         return
 
-@app.route('/login', methods=['POST'])
+@app.route('/todos/login', methods=['POST'])
 def login():
     try:
         request_body = request.get_json()
@@ -34,12 +34,12 @@ def login():
         return make_response(jsonify({"message":"Invalid username or password",
                                         "error": True}), 400)
 
-@app.route("/logout")
+@app.route("/todos/logout")
 def logout():
     session.pop('username', None)
     return make_response(jsonify({"message":'You\'re now logged out'}), 200)
 
-@app.route("/get")
+@app.route("/todos")
 def get_todo():
     username = session.get('username')
     try:
@@ -50,7 +50,7 @@ def get_todo():
         return make_response(jsonify({"message":'User todo list not found',
                                 "error": True}), 500)
 
-@app.route("/add", methods=['POST'])
+@app.route("/todos", methods=['POST'])
 def add_todo():
     username = session.get('username')
     try:
@@ -68,7 +68,7 @@ def add_todo():
         return make_response(jsonify({"message":"Internal server error",
                                         "error": True}), 500)
 
-@app.route("/complete/<task_id>", methods=['PUT'])
+@app.route("/todos/<task_id>/complete", methods=['PUT'])
 def complete_task(task_id):
     username = session.get('username')
     try:
@@ -80,7 +80,7 @@ def complete_task(task_id):
                                         "error": True}), 500)
 
 
-@app.route("/delete/<task_id>", methods=['DELETE'])
+@app.route("/todos/<task_id>/delete", methods=['DELETE'])
 def delete_task(task_id):
     username = session.get('username')
     try:

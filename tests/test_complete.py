@@ -15,11 +15,11 @@ def test_set_a_todo_to_complete_endpoint():
     }
     s = requests.session()
 
-    s.post('http://localhost:8000/login',
+    s.post('http://localhost:8000/todos/login',
                              json=body1)
-    s.post('http://localhost:8000/add',
+    s.post('http://localhost:8000/todos',
                              json=body2)
-    response = s.put('http://localhost:8000/complete/1',
+    response = s.put('http://localhost:8000/todos/1/complete',
                              json=body2)
 
     tasks = response.json()['tasks']

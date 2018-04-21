@@ -15,10 +15,10 @@ def test_logout_endpoint():
     }
     s = requests.session()
 
-    s.post('http://localhost:8000/login',
+    s.post('http://localhost:8000/todos/login',
                              json=body1)
-    s.get('http://localhost:8000/logout')
-    response = s.post('http://localhost:8000/add',
+    s.get('http://localhost:8000/todos/logout')
+    response = s.post('http://localhost:8000/todos',
                              json=body2)
 
     actual = response.json()
