@@ -1,9 +1,8 @@
-from flask import Flask, jsonify
+from flask import jsonify
 from werkzeug.exceptions import HTTPException
 from werkzeug.exceptions import default_exceptions
 
-app = Flask(__name__)
-app.config['DEBUG'] = True
+from .views import app
 
 def json_errorhandler(exception):
     """Create a JSON-encoded flask Response from an Exception."""

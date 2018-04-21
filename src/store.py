@@ -22,7 +22,7 @@ class UserStore:
       MemoryStore.set("user:%s" % username, {'id': user_id, 'username': username,
                                                             'password': password})
   @classmethod
-  def get(cls, user_id):
+  def get_one(cls, user_id):
       return MemoryStore.get(user_id)
 
   @classmethod
@@ -40,12 +40,12 @@ UserStore.create('Homer Simpson','TV')
 
 class TodoStore:
     @classmethod
-    def get(cls, user_id):
+    def get_all_by_user(cls, user_id):
         return MemoryStore.get("todo:%s" % user_id) or []
 
     @classmethod
     def add(cls, user_id, task):
-        todos = TodoStore.get(user_id)
+        todos = TodoStore.get_all_by_user(user_id)
         keys = ['id', 'description', 'complete']
         values = [str(len(todos)+1), task, False]
         todos.append(dict(zip(keys, values)))
@@ -53,7 +53,7 @@ class TodoStore:
 
     @classmethod
     def complete(cls, user_id, task_id):
-        todos = TodoStore.get(user_id)
+        todos = TodoStore.get_all_by_user(user_id)
         for item in todos:
             if item["id"] == str(task_id):
                 item["complete"] = True
@@ -62,7 +62,7 @@ class TodoStore:
 
     @classmethod
     def delete(cls, user_id, task_id):
-        todos = TodoStore.get(user_id)
+        todos = TodoStore.get_all_by_user(user_id)
         for item in todos:
             if item["id"] == str(task_id):
                 todos.remove(item)

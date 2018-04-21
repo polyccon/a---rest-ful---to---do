@@ -1,7 +1,9 @@
-from flask import jsonify, request, make_response, session
+from flask import Flask, jsonify, request, make_response, session
 
 from .store import *
-from .core import app
+
+app = Flask(__name__)
+app.config['DEBUG'] = True
 
 @app.before_request
 def before_request():
@@ -10,7 +12,7 @@ def before_request():
         return
     if not user_id:
         return make_response(jsonify({"message":'Login required', "error": True}), 401)
-    user = UserStore.get("user:%s" % user_id)
+    user = UserStore.get_one("user:%s" % user_id)
     if user is not None:
         return make_response(jsonify({"message":'Invalid credentials, please login again.',
                                     "error": True}), 401)
@@ -41,7 +43,7 @@ def logout():
 def get_todo():
     user_id = session.get('user_id')
     try:
-        tasks = TodoStore.get(user_id)
+        tasks = TodoStore.get_all_by_user(user_id)
         return make_response(jsonify({"tasks":tasks}), 200)
     except Exception as e:
         print ('error', e)
