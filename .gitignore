@@ -1,5 +1,4 @@
 sqliteversion
 my_env
-test*.py
 __pycache__
 src/__pycache__
