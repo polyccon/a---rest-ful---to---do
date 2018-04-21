@@ -10,10 +10,11 @@ def before_request():
     if request.endpoint in ['login', 'logout']:
         return
     if not user_id:
-        return make_response(jsonify({"error":'Login required'}), 401)
+        return make_response(jsonify({"message":'Login required', "error": True}), 401)
     user = MemoryStore.get("user:%s" % user_id)
     if not user:
-        return make_response(jsonify({"error":'Invalid credentials, please login again.'}), 402)
+        return make_response(jsonify({"message":'Invalid credentials, please login again.',
+                                    "error": True}), 402)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -23,13 +24,14 @@ def login():
         password = request_body['password']
     except Exception as e:
         print ('error', e)
-        return make_response(jsonify({"message":'Error: Bad request'}), 400)
+        return make_response(jsonify({"message":"Bad request", "error": True}), 400)
     user = UserStore.login(username, password)
     if user:
         session['user_id'] = user['id']
         return make_response(jsonify({"message":'You\'re now logged in'}), 200)
     else:
-        return make_response(jsonify({"message":'Error: Invalid username or password'}), 400)
+        return make_response(jsonify({"message":"Invalid username or password",
+                                        "error": True}), 400)
 
 @app.route("/logout")
 def logout():
@@ -43,7 +45,7 @@ def get_todo():
         tasks = TodoStore.get(user_id)
         return make_response(jsonify({"tasks":tasks}), 200)
     else:
-        return make_response(jsonify({"error":'Please login'}), 401)
+        return make_response(jsonify({"message":'Please login', "error": True}), 401)
 
 @app.route("/add", methods=['POST'])
 def add_todo():
@@ -52,13 +54,15 @@ def add_todo():
         task = request_body['task']
     except Exception as e:
         print ('error', e)
-        return make_response(jsonify({"message":'Error'}), 400)
+        return make_response(jsonify({"message":"Task key missing from request body",
+                                        "error": True}), 400)
     try:
         TodoStore.add(username, task)
         return get_todo()
     except Exception as e:
         print ('error', e)
-        return make_response(jsonify({"message":'Error'}), 500)
+        return make_response(jsonify({"message":"Internal server error",
+                                        "error": True}), 500)
 
 @app.route("/complete/<id>", methods=['PUT'])
 def complete_task(task_id):
@@ -67,7 +71,8 @@ def complete_task(task_id):
         return get_todo()
     except Exception as e:
         print ('error', e)
-        return make_response(jsonify({"message":'Error'}), 500)
+        return make_response(jsonify({"message":"Internal server error",
+                                        "error": True}), 500)
 
 
 @app.route("/delete/<id>", methods=['DELETE'])
@@ -77,4 +82,5 @@ def delete_task(task_id):
         return get_todo()
     except Exception as e:
         print ('error', e)
-        return make_response(jsonify({"message":'Error'}), 500)
+        return make_response(jsonify({"message":"Internal server error",
+                                        "error": True}), 500)
