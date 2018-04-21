@@ -23,6 +23,7 @@ def test_login_works_and_delete_a_todo_subsequently():
                              json=body2)
 
     actual = response.json()['tasks']
+    assert actual == []
+    
     actual_status_code = response.status_code
     assert actual_status_code == 200
-    assert actual == []

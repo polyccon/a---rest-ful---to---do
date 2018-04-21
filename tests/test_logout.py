@@ -21,6 +21,8 @@ def test_logout_works_():
     response = s.post('http://localhost:8000/add',
                              json=body2)
 
-    actual = response.status_code
-
-    assert actual == 401
+    actual = response.json()
+    actual_status_code = response.status_code
+    assert actual_status_code == 401
+    assert actual['message'] == 'Login required'
+    assert actual['error'] == True

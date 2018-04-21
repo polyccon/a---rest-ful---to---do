@@ -22,7 +22,10 @@ def test_login_works_and_set_a_todo_to_complete_subsequently():
     response = s.put('http://localhost:8000/complete/1',
                              json=body2)
 
-    actual = response.json()['tasks']
+    tasks = response.json()['tasks']
     actual_status_code = response.status_code
     assert actual_status_code == 200
-    assert actual == [{'complete': True, 'description': 'wash the dishes', 'id': '1'}]
+    for item in tasks:
+        if item['id'] == 1:
+            assert actual['complete'] ==  True
+            break
