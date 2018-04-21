@@ -1,4 +1,5 @@
 import uuid
+import copy
 
 class MemoryStore:
     @classmethod
@@ -30,22 +31,25 @@ class UserStore:
     else:
       return None
 
+UserStore.create('user18081971','Aphex')
 
 class TodoStore:
     @classmethod
     def get(cls, user_id):
+
         return MemoryStore.get("todo:%s" % user_id) or []
 
     @classmethod
-    def add_todo(cls, user_id, task):
-        todos = TodoStore.get(cls, user_id)
-        newtodos = todos.append({"id":str(len(todos)+1), "description":"%s"% task,
-                                                            "complete": False })
-        MemoryStore.set("todo:%s"% user_id, "%s" % newtodos)
+    def add(cls, user_id, task):
+        todos = TodoStore.get(user_id)
+        keys = ['id', 'description', 'complete']
+        values = [str(len(todos)+1), task, False]
+        todos.append(dict(zip(keys, values)))
+        MemoryStore.set("todo:%s"% user_id, "%s" % todos)
 
     @classmethod
     def complete_task(cls, username, task_id):
-        todos = TodoStore.get(cls, user_id)
+        todos = TodoStore.get(user_id)
         for item in todos:
             if item["id"] == str(task_id):
                 item["complete"] == True
@@ -54,7 +58,7 @@ class TodoStore:
 
     @classmethod
     def delete_task(cls, username, task_id):
-        todos = TodoStore.get(cls, user_id)
+        todos = TodoStore.get(user_id)
         for item in todos:
             if item["id"] == str(task_id):
                 todos.remove(item)

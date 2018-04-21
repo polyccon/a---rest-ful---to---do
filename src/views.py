@@ -12,7 +12,7 @@ def before_request():
     if not user_id:
         return make_response(jsonify({"message":'Login required', "error": True}), 401)
     user = MemoryStore.get("user:%s" % user_id)
-    if not user:
+    if user is not None:
         return make_response(jsonify({"message":'Invalid credentials, please login again.',
                                     "error": True}), 402)
 
@@ -49,6 +49,7 @@ def get_todo():
 
 @app.route("/add", methods=['POST'])
 def add_todo():
+    user_id = session.get('user_id')
     try:
         request_body = request.get_json()
         task = request_body['task']
@@ -57,7 +58,7 @@ def add_todo():
         return make_response(jsonify({"message":"Task key missing from request body",
                                         "error": True}), 400)
     try:
-        TodoStore.add(username, task)
+        TodoStore.add(user_id, task)
         return get_todo()
     except Exception as e:
         print ('error', e)
@@ -66,8 +67,9 @@ def add_todo():
 
 @app.route("/complete/<id>", methods=['PUT'])
 def complete_task(task_id):
+    user_id = session.get('user_id')
     try:
-        TodoStore.complete(username, task_id)
+        TodoStore.complete(user_id, task_id)
         return get_todo()
     except Exception as e:
         print ('error', e)
@@ -77,8 +79,9 @@ def complete_task(task_id):
 
 @app.route("/delete/<id>", methods=['DELETE'])
 def delete_task(task_id):
+    user_id = session.get('user_id')
     try:
-        TodoStore.delete(username, task_id)
+        TodoStore.delete(user_id, task_id)
         return get_todo()
     except Exception as e:
         print ('error', e)
