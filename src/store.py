@@ -22,6 +22,9 @@ class UserStore:
       user_id = str(uuid.uuid4())
       MemoryStore.set("user:%s" % username, {'id': user_id, 'username': username,
                                                             'password': password})
+  @classmethod
+  def get(cls, user_id):
+      return MemoryStore.get(user_id)
 
   @classmethod
   def login(cls, username, password):

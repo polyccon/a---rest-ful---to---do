@@ -6,15 +6,14 @@ from .core import app
 @app.before_request
 def before_request():
     user_id = session.get('user_id')
-    user = MemoryStore.get("user:%s" % user_id)
     if request.endpoint in ['login', 'logout']:
         return
     if not user_id:
         return make_response(jsonify({"message":'Login required', "error": True}), 401)
-    user = MemoryStore.get("user:%s" % user_id)
+    user = UserStore.get("user:%s" % user_id)
     if user is not None:
         return make_response(jsonify({"message":'Invalid credentials, please login again.',
-                                    "error": True}), 402)
+                                    "error": True}), 401)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -26,7 +25,7 @@ def login():
         print ('error', e)
         return make_response(jsonify({"message":"Bad request", "error": True}), 400)
     user = UserStore.login(username, password)
-    if user:
+    if user is not None:
         session['user_id'] = user['id']
         return make_response(jsonify({"message":'You\'re now logged in'}), 200)
     else:
@@ -41,11 +40,13 @@ def logout():
 @app.route("/get")
 def get_todo():
     user_id = session.get('user_id')
-    if user_id is not None:
+    try:
         tasks = TodoStore.get(user_id)
         return make_response(jsonify({"tasks":tasks}), 200)
-    else:
-        return make_response(jsonify({"message":'Please login', "error": True}), 401)
+    except Exception as e:
+        print ('error', e)
+        return make_response(jsonify({"message":'User todo list not found',
+                                "error": True}), 500)
 
 @app.route("/add", methods=['POST'])
 def add_todo():
