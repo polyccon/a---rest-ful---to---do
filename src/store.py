@@ -48,7 +48,7 @@ class TodoStore:
         MemoryStore.set("todo:%s"% user_id, todos)
 
     @classmethod
-    def complete_task(cls, user_id, task_id):
+    def complete(cls, user_id, task_id):
         todos = TodoStore.get(user_id)
         for item in todos:
             if item["id"] == str(task_id):
@@ -57,7 +57,7 @@ class TodoStore:
                 break
 
     @classmethod
-    def delete_task(cls, user_id, task_id):
+    def delete(cls, user_id, task_id):
         todos = TodoStore.get(user_id)
         for item in todos:
             if item["id"] == str(task_id):

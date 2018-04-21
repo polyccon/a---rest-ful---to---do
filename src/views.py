@@ -65,7 +65,7 @@ def add_todo():
         return make_response(jsonify({"message":"Internal server error",
                                         "error": True}), 500)
 
-@app.route("/complete/<id>", methods=['PUT'])
+@app.route("/complete/<task_id>", methods=['PUT'])
 def complete_task(task_id):
     user_id = session.get('user_id')
     try:
@@ -77,7 +77,7 @@ def complete_task(task_id):
                                         "error": True}), 500)
 
 
-@app.route("/delete/<id>", methods=['DELETE'])
+@app.route("/delete/<task_id>", methods=['DELETE'])
 def delete_task(task_id):
     user_id = session.get('user_id')
     try:
