@@ -17,7 +17,7 @@ def before_request():
     else:
         return
 
-@app.route('/todos/login', methods=['POST'])
+@app.route('/session', methods=['POST'])
 def login():
     try:
         request_body = request.get_json()
@@ -34,7 +34,7 @@ def login():
         return make_response(jsonify({"message":"Invalid username or password",
                                         "error": True}), 400)
 
-@app.route("/todos/logout")
+@app.route("/session", methods=['DELETE'])
 def logout():
     session.pop('username', None)
     return make_response(jsonify({"message":'You\'re now logged out'}), 200)

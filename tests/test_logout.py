@@ -15,9 +15,9 @@ def test_logout_endpoint():
     }
     s = requests.session()
 
-    s.post('http://localhost:8000/todos/login',
+    s.post('http://localhost:8000/session',
                              json=body1)
-    s.get('http://localhost:8000/todos/logout')
+    s.delete('http://localhost:8000/session')
     response = s.post('http://localhost:8000/todos',
                              json=body2)
 

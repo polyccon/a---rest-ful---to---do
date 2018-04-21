@@ -3,7 +3,7 @@ import requests
 from src.views import *
 
 def test_login_works_and_add_a_todo_subsequently():
-    """Test if '/login' and subsequent call to '/add' endpoint returns 200
+    """Test if '/login' and subsequent call to '/todos' endpoint returns 200
         when auth details are correct
     """
     body1 = {
@@ -15,7 +15,7 @@ def test_login_works_and_add_a_todo_subsequently():
     }
     s = requests.session()
 
-    s.post('http://localhost:8000/todos/login',
+    s.post('http://localhost:8000/session',
                              json=body1)
     response = s.post('http://localhost:8000/todos',
                              json=body2)

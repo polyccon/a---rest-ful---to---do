@@ -2,8 +2,8 @@ import pytest
 import requests
 from src.views import *
 
-def test_get_endpoint():
-    """Test if '/get' returns tasks and 200 status code when auth details are correct
+def test_get_todos_endpoint():
+    """Test if '/todos' returns tasks and 200 status code when auth details are correct
     """
     body1 = {
         'username': 'Homer Simpson',
@@ -11,7 +11,7 @@ def test_get_endpoint():
     }
     s = requests.session()
 
-    s.post('http://localhost:8000/todos/login',
+    s.post('http://localhost:8000/session',
                              json=body1)
     response = s.get('http://localhost:8000/todos')
 
