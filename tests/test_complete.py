@@ -2,7 +2,7 @@ import pytest
 import requests
 from src.views import *
 
-def test_login_works_and_set_a_todo_to_complete_subsequently():
+def test_set_a_todo_to_complete_endpoint():
     """Test if '/login' and subsequent call to '/complete' endpoint returns 200
         when auth details are correct
     """

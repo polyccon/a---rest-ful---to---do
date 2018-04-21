@@ -2,7 +2,7 @@ import pytest
 import requests
 from src.views import *
 
-def test_logout_works_():
+def test_logout_endpoint():
     """Test if '/logout' works by logging in, then logout and subsequent call to
         add endpoint returns 401
     """
