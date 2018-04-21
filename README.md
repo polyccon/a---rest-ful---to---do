@@ -17,4 +17,4 @@ To run the code:
 8. You are now ready to make requests to the endpoints
 9. To run the tests, you need to be located at the root of this directory and
    run the command: `pytest`
-10. Deactivate the environment when the code exits: deactivate
+10. Deactivate the environment when you're done playing with it: `deactivate`
