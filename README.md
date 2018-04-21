@@ -13,7 +13,7 @@ To run the code:
 4. Activate the virtual environment: `source my_env/bin/activate`
 5. Install dependencies inside it: `pip install -r requirements.txt`
 6. Run the command: python3 run.py
-7. Go to 'http://localhost:8000' in your browser
+7. Open 'http://localhost:8000' in your browser (or not necessarily)
 8. You are ready to make requests to the endpoints
 9. To run the tests, command is: `pytest`
 10. Deactivate the environment when the code exits: deactivate

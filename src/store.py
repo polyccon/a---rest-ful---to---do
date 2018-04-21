@@ -37,6 +37,7 @@ class UserStore:
 UserStore.create('user18081971','Aphex')
 UserStore.create('Tom Cruise','Top Gun')
 UserStore.create('Dustin Hoffman','Rainman')
+UserStore.create('Homer Simpson','TV')
 
 class TodoStore:
     @classmethod

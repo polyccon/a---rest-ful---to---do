@@ -6,8 +6,8 @@ def test_get_endpoint():
     """Test if '/get' returns tasks and 200 status code when auth details are correct
     """
     body1 = {
-        'username': 'Dustin Hoffman',
-        'password': 'Rainman'
+        'username': 'Homer Simpson',
+        'password': 'TV'
     }
     s = requests.session()
 
