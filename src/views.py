@@ -17,6 +17,7 @@ def before_request():
     else:
         return
 
+
 @app.route('/session', methods=['POST'])
 def login():
     try:
@@ -26,6 +27,7 @@ def login():
     except Exception as e:
         print ('error', e)
         return make_response(jsonify({"message":"Bad request", "error": True}), 400)
+
     user = UserStore.login(username, password)
     if user is not None:
         session['username'] = user['username']
@@ -34,17 +36,19 @@ def login():
         return make_response(jsonify({"message":"Invalid username or password",
                                         "error": True}), 400)
 
+
 @app.route("/session", methods=['DELETE'])
 def logout():
     session.pop('username', None)
     return make_response(jsonify({"message":'You\'re now logged out'}), 200)
 
+
 @app.route("/todos")
 def get_todo():
     username = session.get('username')
     try:
-        tasks = TodoStore.get_all_by_user(username)
-        return make_response(jsonify({"tasks":tasks}), 200)
+        todos = TodoStore.get_all_by_user(username)
+        return make_response(jsonify({"todos":todos}), 200)
     except Exception as e:
         print ('error', e)
         return make_response(jsonify({"message":'User todo list not found',
@@ -55,24 +59,24 @@ def add_todo():
     username = session.get('username')
     try:
         request_body = request.get_json()
-        task = request_body['task']
+        todo = request_body['todo']
     except Exception as e:
         print ('error', e)
-        return make_response(jsonify({"message":"Task key missing from request body",
+        return make_response(jsonify({"message":"Todo key missing from request body",
                                         "error": True}), 400)
     try:
-        TodoStore.add(username, task)
+        TodoStore.add(username, todo)
         return get_todo()
     except Exception as e:
         print ('error', e)
         return make_response(jsonify({"message":"Internal server error",
                                         "error": True}), 500)
 
-@app.route("/todos/<task_id>/complete", methods=['PUT'])
-def complete_task(task_id):
+@app.route("/todos/<todo_id>/complete", methods=['PUT'])
+def complete_todo(todo_id):
     username = session.get('username')
     try:
-        TodoStore.complete(username, task_id)
+        TodoStore.complete(username, todo_id)
         return get_todo()
     except Exception as e:
         print ('error', e)
@@ -80,11 +84,11 @@ def complete_task(task_id):
                                         "error": True}), 500)
 
 
-@app.route("/todos/<task_id>/delete", methods=['DELETE'])
-def delete_task(task_id):
+@app.route("/todos/<todo_id>/delete", methods=['DELETE'])
+def delete_todo(todo_id):
     username = session.get('username')
     try:
-        TodoStore.delete(username, task_id)
+        TodoStore.delete(username, todo_id)
         return get_todo()
     except Exception as e:
         print ('error', e)

@@ -11,7 +11,7 @@ def test_delete_a_todo():
         'password': 'Rainman'
     }
     body2 = {
-        'task': 'ironing and cleaning'
+        'todo': 'ironing and cleaning'
     }
     s = requests.session()
 
@@ -22,7 +22,7 @@ def test_delete_a_todo():
     response = s.delete('http://localhost:8000/todos/1/delete',
                              json=body2)
 
-    actual = response.json()['tasks']
+    actual = response.json()['todos']
     assert actual == []
 
     actual_status_code = response.status_code

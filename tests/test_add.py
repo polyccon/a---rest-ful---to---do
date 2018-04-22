@@ -11,7 +11,7 @@ def test_login_works_and_add_a_todo_subsequently():
         'password': 'Aphex'
     }
     body2 = {
-        'task': 'clean my cds'
+        'todo': 'clean my cds'
     }
     s = requests.session()
 

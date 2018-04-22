@@ -11,7 +11,7 @@ def test_logout_endpoint():
         'password': 'Aphex'
     }
     body2 = {
-        'task': 'clean my cds'
+        'todo': 'clean my cds'
     }
     s = requests.session()
 

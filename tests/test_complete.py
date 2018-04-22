@@ -11,7 +11,7 @@ def test_set_a_todo_to_complete_endpoint():
         'password': 'Top Gun'
     }
     body2 = {
-        'task': 'wash the dishes'
+        'todo': 'wash the dishes'
     }
     s = requests.session()
 
@@ -22,10 +22,10 @@ def test_set_a_todo_to_complete_endpoint():
     response = s.put('http://localhost:8000/todos/1/complete',
                              json=body2)
 
-    tasks = response.json()['tasks']
+    todos = response.json()['todos']
     actual_status_code = response.status_code
     assert actual_status_code == 200
-    for item in tasks:
+    for item in todos:
         if item['id'] == 1:
             assert actual['complete'] ==  True
             break

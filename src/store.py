@@ -44,27 +44,27 @@ class TodoStore:
         return MemoryStore.get("todo:%s" % username) or []
 
     @classmethod
-    def add(cls, username, task):
+    def add(cls, username, todo):
         todos = TodoStore.get_all_by_user(username)
         keys = ['id', 'description', 'complete']
-        values = [str(len(todos)+1), task, False]
+        values = [str(len(todos)+1), todo, False]
         todos.append(dict(zip(keys, values)))
         MemoryStore.set("todo:%s"% username, todos)
 
     @classmethod
-    def complete(cls, username, task_id):
+    def complete(cls, username, todo_id):
         todos = TodoStore.get_all_by_user(username)
         for item in todos:
-            if item["id"] == str(task_id):
+            if item["id"] == str(todo_id):
                 item["complete"] = True
                 MemoryStore.set("todo:%s"% username, todos)
                 break
 
     @classmethod
-    def delete(cls, username, task_id):
+    def delete(cls, username, todo_id):
         todos = TodoStore.get_all_by_user(username)
         for item in todos:
-            if item["id"] == str(task_id):
+            if item["id"] == str(todo_id):
                 todos.remove(item)
                 MemoryStore.set("todo:%s"% username, todos)
                 break
