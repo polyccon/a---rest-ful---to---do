@@ -1,4 +1,4 @@
-# A-Restful-To--Do--List
+# A-Restful-To->-Do->-List
 
 A RESTful API made with Python 3.6 and flask framework with authentication
 
@@ -6,8 +6,11 @@ Instructions for use:
 
 To run the code:
 
-1. Clone the repo and cd into the directory _*If you have the requirements
-   listed in the `requirements.txt` file already, then proceed to*_ **step 6**
+1. Clone the repo and cd into the directory
+
+_*If you have the requirements listed in the `requirements.txt` file already
+installed in your machine, then proceed to*_ **step 6**
+
 2. Dependencies are all installed inside a virtual environment, to use it you
    need to have virtualenv installed as such: `pip install virtualenv`
 3. Create virtual environment: `virtualenv my_env`
